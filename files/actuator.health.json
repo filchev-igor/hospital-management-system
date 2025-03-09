@@ -1,0 +1,32 @@
+{
+  "status": "UP",
+  "components": {
+    "db": {
+      "status": "UP",
+      "details": {
+        "database": "H2",
+        "validationQuery": "isValid()"
+      }
+    },
+    "diskSpace": {
+      "status": "UP",
+      "details": {
+        "total": 254866644992,
+        "free": 21060624384,
+        "threshold": 10485760,
+        "path": "C:\\Users\\filch\\Desktop\\Ferry\\Code\\hospital-management-system\\.",
+        "exists": true
+      }
+    },
+    "ping": {
+      "status": "UP"
+    },
+    "ssl": {
+      "status": "UP",
+      "details": {
+        "validChains": [],
+        "invalidChains": []
+      }
+    }
+  }
+}
