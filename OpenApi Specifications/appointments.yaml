@@ -1,0 +1,180 @@
+openapi: "3.1.0"
+info:
+  title: "hospital_management_system API"
+  description: "hospital_management_system API"
+  version: "1.0.0"
+servers:
+  - url: "https://hospital_management_system"
+paths:
+  /api/appointments:
+    get:
+      summary: "GET api/appointments"
+      operationId: "getAllAppointments"
+      parameters:
+        - name: "doctorId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+            format: "uuid"
+        - name: "patientId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/AppointmentDTO"
+    post:
+      summary: "POST api/appointments"
+      operationId: "addAppointment"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Appointment"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppointmentDTO"
+  /api/appointments/export:
+    get:
+      summary: "GET api/appointments/export"
+      operationId: "exportAppointmentsToXml"
+      parameters:
+        - name: "doctorId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+            format: "uuid"
+        - name: "patientId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+components:
+  schemas:
+    PatientDTO:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        name:
+          type: "string"
+        dob:
+          type: "string"
+          format: "date"
+        creationDate:
+          type: "string"
+          format: "date-time"
+        updateDate:
+          type: "string"
+          format: "date-time"
+    DoctorDTO:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        name:
+          type: "string"
+        specialty:
+          type: "string"
+        creationDate:
+          type: "string"
+          format: "date-time"
+        updateDate:
+          type: "string"
+          format: "date-time"
+    AppointmentDTO:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        patient:
+          $ref: "#/components/schemas/PatientDTO"
+        doctor:
+          $ref: "#/components/schemas/DoctorDTO"
+        appointmentDate:
+          type: "string"
+          format: "date-time"
+        creationDate:
+          type: "string"
+          format: "date-time"
+        updateDate:
+          type: "string"
+          format: "date-time"
+    Patient:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        name:
+          type: "string"
+        dob:
+          type: "string"
+          format: "date"
+        creationDate:
+          type: "string"
+          format: "date-time"
+        updateDate:
+          type: "string"
+          format: "date-time"
+    Doctor:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        name:
+          type: "string"
+        specialty:
+          type: "string"
+        creationDate:
+          type: "string"
+          format: "date-time"
+        updateDate:
+          type: "string"
+          format: "date-time"
+    Appointment:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        patient:
+          $ref: "#/components/schemas/Patient"
+        doctor:
+          $ref: "#/components/schemas/Doctor"
+        appointmentDate:
+          type: "string"
+          format: "date-time"
+        creationDate:
+          type: "string"
+          format: "date-time"
+        updateDate:
+          type: "string"
+          format: "date-time"

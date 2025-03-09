@@ -1,0 +1,131 @@
+openapi: "3.1.0"
+info:
+  title: "hospital_management_system API"
+  description: "hospital_management_system API"
+  version: "1.0.0"
+servers:
+  - url: "https://hospital_management_system"
+paths:
+  /api/patients:
+    get:
+      summary: "GET api/patients"
+      operationId: "getAllPatients"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/PatientDTO"
+    post:
+      summary: "POST api/patients"
+      operationId: "addPatient"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Patient"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PatientDTO"
+  /api/patients/{id}:
+    get:
+      summary: "GET api/patients/{id}"
+      operationId: "getPatientById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PatientDTO"
+    put:
+      summary: "PUT api/patients/{id}"
+      operationId: "updatePatient"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Patient"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PatientDTO"
+    delete:
+      summary: "DELETE api/patients/{id}"
+      operationId: "deletePatient"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+components:
+  schemas:
+    PatientDTO:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        name:
+          type: "string"
+        dob:
+          type: "string"
+          format: "date"
+        creationDate:
+          type: "string"
+          format: "date-time"
+        updateDate:
+          type: "string"
+          format: "date-time"
+    Patient:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        name:
+          type: "string"
+        dob:
+          type: "string"
+          format: "date"
+        creationDate:
+          type: "string"
+          format: "date-time"
+        updateDate:
+          type: "string"
+          format: "date-time"
