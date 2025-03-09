@@ -1,6 +1,5 @@
 package lt.dev.hospitalmanagementsystem.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,12 +20,10 @@ public class Appointment {
 
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
-    @JsonBackReference  // This is the "back" part of the relationship
     private Patient patient;
 
     @ManyToOne
     @JoinColumn(name = "doctor_id", nullable = false)
-    @JsonBackReference  // This is the "back" part of the relationship
     private Doctor doctor;
 
     private LocalDateTime appointmentDate;

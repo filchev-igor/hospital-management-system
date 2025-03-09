@@ -1,6 +1,6 @@
 package lt.dev.hospitalmanagementsystem.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +31,7 @@ public class Patient {
     private LocalDateTime updateDate;
 
     @OneToMany(mappedBy = "patient")
-    @JsonManagedReference  // This is the "forward" part of the relationship
+    @JsonIgnore  // Prevent serialization of appointments to avoid circular reference
     private List<Appointment> appointments;
 
     @PrePersist
