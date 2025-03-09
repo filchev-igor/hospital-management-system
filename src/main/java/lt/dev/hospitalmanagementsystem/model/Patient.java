@@ -2,8 +2,11 @@ package lt.dev.hospitalmanagementsystem.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import lt.dev.hospitalmanagementsystem.util.LocalDateAdapter;
+import lt.dev.hospitalmanagementsystem.util.LocalDateTimeAdapter;
+import lt.dev.hospitalmanagementsystem.util.UuidAdapter;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,10 +23,12 @@ import java.util.UUID;
 @Entity
 @Table(name = "patients")
 @XmlRootElement(name = "patient")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @XmlElement
+    @XmlJavaTypeAdapter(UuidAdapter.class)
     private UUID id;
 
     @Column(nullable = false)
@@ -31,18 +36,22 @@ public class Patient {
     private String name;
 
     @XmlElement
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
     private LocalDate dob;
 
     @Column(name = "creation_date", nullable = false)
     @XmlElement
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     private LocalDateTime creationDate;
 
     @Column(name = "update_date", nullable = false)
     @XmlElement
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     private LocalDateTime updateDate;
 
     @OneToMany(mappedBy = "patient")
     @JsonIgnore
+    @XmlTransient // Exclude from XML to avoid cyclic references
     private List<Appointment> appointments;
 
     /**

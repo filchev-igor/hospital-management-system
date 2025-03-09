@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -45,15 +46,30 @@ class AppointmentControllerTest {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(appointmentController).build();
 
+        // Create a Doctor
+        Doctor doctor = new Doctor();
+        doctor.setId(UUID.randomUUID());
+        doctor.setName("Dr. Smith");
+        doctor.setSpecialty("Cardiology");
+        doctor.setCreationDate(LocalDateTime.now());
+        doctor.setUpdateDate(LocalDateTime.now());
+
+        // Create a Patient
+        Patient patient = new Patient();
+        patient.setId(UUID.randomUUID());
+        patient.setName("John Doe");
+        patient.setDob(LocalDate.of(1990, 1, 1));
+        patient.setCreationDate(LocalDateTime.now());
+        patient.setUpdateDate(LocalDateTime.now());
+
+        // Create an Appointment
         appointment = new Appointment();
         appointment.setId(UUID.randomUUID());
         appointment.setAppointmentDate(LocalDateTime.now());
         appointment.setCreationDate(LocalDateTime.now());
         appointment.setUpdateDate(LocalDateTime.now());
-        appointment.setPatient(new Patient());
-        appointment.getPatient().setId(UUID.randomUUID());
-        appointment.setDoctor(new Doctor());
-        appointment.getDoctor().setId(UUID.randomUUID());
+        appointment.setPatient(patient);
+        appointment.setDoctor(doctor);
     }
 
     @Test
@@ -70,7 +86,7 @@ class AppointmentControllerTest {
 
     @Test
     void exportAppointmentsToXml_withDoctorId_shouldReturnFilePath() throws Exception {
-        UUID doctorId = UUID.randomUUID();
+        UUID doctorId = appointment.getDoctor().getId();
         List<Appointment> appointments = Arrays.asList(appointment);
         when(appointmentRepository.findByDoctorId(doctorId)).thenReturn(appointments);
         when(xmlExportService.exportAppointmentsToXml(anyList())).thenReturn("exported_xml/appointments_20250309_123456.xml");
