@@ -14,7 +14,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
- * REST controller for managing appointments.
+ * REST controller for managing appointments in the hospital management system.
+ * Provides endpoints for retrieving and adding appointments.
  */
 @RestController
 @RequestMapping("/api/appointments")
@@ -36,7 +37,7 @@ public class AppointmentController {
      *
      * @param doctorId the UUID of the doctor to filter by (optional)
      * @param patientId the UUID of the patient to filter by (optional)
-     * @return a list of AppointmentDTOs
+     * @return a list of AppointmentDTOs representing the filtered appointments
      */
     @GetMapping
     public List<AppointmentDTO> getAllAppointments(
