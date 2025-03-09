@@ -21,12 +21,12 @@ public class Appointment {
 
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
-    @JsonBackReference  // Prevent circular reference for bidirectional relationship
+    @JsonBackReference  // This is the "back" part of the relationship
     private Patient patient;
 
     @ManyToOne
     @JoinColumn(name = "doctor_id", nullable = false)
-    @JsonBackReference  // Prevent circular reference for bidirectional relationship
+    @JsonBackReference  // This is the "back" part of the relationship
     private Doctor doctor;
 
     private LocalDateTime appointmentDate;
