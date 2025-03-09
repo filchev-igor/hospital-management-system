@@ -1,0 +1,120 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: your_name
+      changes:
+        - createTable:
+            tableName: patients
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dob
+                  type: DATE
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+  - changeSet:
+      id: 2
+      author: your_name
+      changes:
+        - createTable:
+            tableName: doctors
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: specialty
+                  type: VARCHAR(255)
+
+  - changeSet:
+      id: 3
+      author: your_name
+      changes:
+        - createTable:
+            tableName: appointments
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: patient_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_patient
+                    references: patients(id)
+              - column:
+                  name: doctor_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_doctor
+                    references: doctors(id)
+              - column:
+                  name: appointment_date
+                  type: TIMESTAMP
+
+  # Load initial patient data from CSV
+  - changeSet:
+      id: 4
+      author: your_name
+      changes:
+        - loadData:
+            file: db/data/patients.csv
+            tableName: patients
+            separator: ","
+            columns:
+              - column: { name: id, type: UUID }
+              - column: { name: name, type: STRING }
+              - column: { name: dob, type: DATE }
+              - column: { name: created_at, type: TIMESTAMP }
+
+  # Load initial doctor data from CSV
+  - changeSet:
+      id: 5
+      author: your_name
+      changes:
+        - loadData:
+            file: db/data/doctors.csv
+            tableName: doctors
+            separator: ","
+            columns:
+              - column: { name: id, type: UUID }
+              - column: { name: name, type: STRING }
+              - column: { name: specialty, type: STRING }
+
+  # Load initial appointment data from CSV
+  - changeSet:
+      id: 6
+      author: your_name
+      changes:
+        - loadData:
+            file: db/data/appointments.csv
+            tableName: appointments
+            separator: ","
+            columns:
+              - column: { name: id, type: UUID }
+              - column: { name: patient_id, type: UUID }
+              - column: { name: doctor_id, type: UUID }
+              - column: { name: appointment_date, type: TIMESTAMP }
