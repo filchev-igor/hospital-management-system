@@ -1,9 +1,13 @@
 package lt.dev.hospitalmanagementsystem.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "doctors")
 public class Doctor {

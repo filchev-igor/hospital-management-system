@@ -9,8 +9,8 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Setter
 @Getter
+@Setter
 @Entity
 @Table(name = "appointments")
 @JsonInclude(JsonInclude.Include.NON_NULL)  // Only include non-null fields in JSON
