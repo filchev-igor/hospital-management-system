@@ -1,5 +1,6 @@
 package lt.dev.hospitalmanagementsystem.controller;
 
+import jakarta.xml.bind.JAXBException;
 import lt.dev.hospitalmanagementsystem.dto.AppointmentDTO;
 import lt.dev.hospitalmanagementsystem.dto.DoctorDTO;
 import lt.dev.hospitalmanagementsystem.dto.PatientDTO;
@@ -7,6 +8,7 @@ import lt.dev.hospitalmanagementsystem.model.Appointment;
 import lt.dev.hospitalmanagementsystem.model.Doctor;
 import lt.dev.hospitalmanagementsystem.model.Patient;
 import lt.dev.hospitalmanagementsystem.repository.AppointmentRepository;
+import lt.dev.hospitalmanagementsystem.service.XmlExportService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,21 +17,24 @@ import java.util.stream.Collectors;
 
 /**
  * REST controller for managing appointments in the hospital management system.
- * Provides endpoints for retrieving and adding appointments.
+ * Provides endpoints for retrieving, adding appointments, and exporting to XML.
  */
 @RestController
 @RequestMapping("/api/appointments")
 public class AppointmentController {
 
     private final AppointmentRepository appointmentRepository;
+    private final XmlExportService xmlExportService;
 
     /**
      * Constructor for dependency injection.
      *
      * @param appointmentRepository the repository for accessing appointment data
+     * @param xmlExportService the service for exporting appointments to XML
      */
-    public AppointmentController(AppointmentRepository appointmentRepository) {
+    public AppointmentController(AppointmentRepository appointmentRepository, XmlExportService xmlExportService) {
         this.appointmentRepository = appointmentRepository;
+        this.xmlExportService = xmlExportService;
     }
 
     /**
@@ -43,19 +48,26 @@ public class AppointmentController {
     public List<AppointmentDTO> getAllAppointments(
             @RequestParam(value = "doctorId", required = false) UUID doctorId,
             @RequestParam(value = "patientId", required = false) UUID patientId) {
-        List<Appointment> appointments;
-        if (doctorId != null && patientId != null) {
-            appointments = appointmentRepository.findByDoctorIdAndPatientId(doctorId, patientId);
-        } else if (doctorId != null) {
-            appointments = appointmentRepository.findByDoctorId(doctorId);
-        } else if (patientId != null) {
-            appointments = appointmentRepository.findByPatientId(patientId);
-        } else {
-            appointments = appointmentRepository.findAll();
-        }
+        List<Appointment> appointments = fetchAppointments(doctorId, patientId);
         return appointments.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Exports appointments to XML, filtered by doctorId and/or patientId.
+     *
+     * @param doctorId the UUID of the doctor to filter by (optional)
+     * @param patientId the UUID of the patient to filter by (optional)
+     * @return the file path of the generated XML file
+     * @throws JAXBException if XML marshalling fails
+     */
+    @GetMapping("/export")
+    public String exportAppointmentsToXml(
+            @RequestParam(value = "doctorId", required = false) UUID doctorId,
+            @RequestParam(value = "patientId", required = false) UUID patientId) throws JAXBException {
+        List<Appointment> appointments = fetchAppointments(doctorId, patientId);
+        return xmlExportService.exportAppointmentsToXml(appointments);
     }
 
     /**
@@ -68,6 +80,25 @@ public class AppointmentController {
     public AppointmentDTO addAppointment(@RequestBody Appointment appointment) {
         Appointment savedAppointment = appointmentRepository.save(appointment);
         return convertToDTO(savedAppointment);
+    }
+
+    /**
+     * Fetches appointments based on doctorId and/or patientId.
+     *
+     * @param doctorId the UUID of the doctor to filter by (optional)
+     * @param patientId the UUID of the patient to filter by (optional)
+     * @return a list of filtered appointments
+     */
+    private List<Appointment> fetchAppointments(UUID doctorId, UUID patientId) {
+        if (doctorId != null && patientId != null) {
+            return appointmentRepository.findByDoctorIdAndPatientId(doctorId, patientId);
+        } else if (doctorId != null) {
+            return appointmentRepository.findByDoctorId(doctorId);
+        } else if (patientId != null) {
+            return appointmentRepository.findByPatientId(patientId);
+        } else {
+            return appointmentRepository.findAll();
+        }
     }
 
     /**
