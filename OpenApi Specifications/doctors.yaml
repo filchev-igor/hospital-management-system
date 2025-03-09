@@ -1,0 +1,129 @@
+openapi: "3.1.0"
+info:
+  title: "hospital_management_system API"
+  description: "hospital_management_system API"
+  version: "1.0.0"
+servers:
+  - url: "https://hospital_management_system"
+paths:
+  /api/doctors:
+    get:
+      summary: "GET api/doctors"
+      operationId: "getAllDoctors"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/DoctorDTO"
+    post:
+      summary: "POST api/doctors"
+      operationId: "addDoctor"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Doctor"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/DoctorDTO"
+  /api/doctors/{id}:
+    get:
+      summary: "GET api/doctors/{id}"
+      operationId: "getDoctorById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/DoctorDTO"
+    put:
+      summary: "PUT api/doctors/{id}"
+      operationId: "updateDoctor"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Doctor"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/DoctorDTO"
+    delete:
+      summary: "DELETE api/doctors/{id}"
+      operationId: "deleteDoctor"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+components:
+  schemas:
+    DoctorDTO:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        name:
+          type: "string"
+        specialty:
+          type: "string"
+        creationDate:
+          type: "string"
+          format: "date-time"
+        updateDate:
+          type: "string"
+          format: "date-time"
+    Doctor:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        name:
+          type: "string"
+        specialty:
+          type: "string"
+        creationDate:
+          type: "string"
+          format: "date-time"
+        updateDate:
+          type: "string"
+          format: "date-time"
