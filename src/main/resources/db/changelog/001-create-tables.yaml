@@ -20,9 +20,17 @@ databaseChangeLog:
                   name: dob
                   type: DATE
               - column:
-                  name: created_at
+                  name: creation_date
                   type: TIMESTAMP
                   defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: update_date
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
 
   - changeSet:
       id: 2
@@ -44,6 +52,18 @@ databaseChangeLog:
               - column:
                   name: specialty
                   type: VARCHAR(255)
+              - column:
+                  name: creation_date
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: update_date
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
 
   - changeSet:
       id: 3
@@ -74,6 +94,18 @@ databaseChangeLog:
               - column:
                   name: appointment_date
                   type: TIMESTAMP
+              - column:
+                  name: creation_date
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: update_date
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
 
   # Load initial patient data from CSV
   - changeSet:
@@ -88,7 +120,8 @@ databaseChangeLog:
               - column: { name: id, type: UUID }
               - column: { name: name, type: STRING }
               - column: { name: dob, type: DATE }
-              - column: { name: created_at, type: TIMESTAMP }
+              - column: { name: creation_date, type: TIMESTAMP }
+              - column: { name: update_date, type: TIMESTAMP }
 
   # Load initial doctor data from CSV
   - changeSet:
@@ -103,6 +136,8 @@ databaseChangeLog:
               - column: { name: id, type: UUID }
               - column: { name: name, type: STRING }
               - column: { name: specialty, type: STRING }
+              - column: { name: creation_date, type: TIMESTAMP }
+              - column: { name: update_date, type: TIMESTAMP }
 
   # Load initial appointment data from CSV
   - changeSet:
@@ -118,3 +153,5 @@ databaseChangeLog:
               - column: { name: patient_id, type: UUID }
               - column: { name: doctor_id, type: UUID }
               - column: { name: appointment_date, type: TIMESTAMP }
+              - column: { name: creation_date, type: TIMESTAMP }
+              - column: { name: update_date, type: TIMESTAMP }
